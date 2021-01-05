@@ -1,0 +1,4 @@
+#ifndef LABO_06_K_PERSON_H
+#define LABO_06_K_PERSON_H
+
+#endif //LABO_06_K_PERSON_H
