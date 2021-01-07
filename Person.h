@@ -20,11 +20,12 @@ public:
     Person(const Person& p);
 
     // Constructeur d'affectation
-    //void operator=(const Person& p);
     Person& operator=(const Person& p);
 
+    // Destructeur
+    ~Person();
+
     static unsigned nbrePerson();
-    //static unsigned nbreCrees() {return nextId;};
 
     // Getters
     unsigned getID() const;
@@ -32,9 +33,9 @@ public:
     string getLastName() const;
     string getDate() const;
 
-private:
     friend ostream& operator<<(ostream& os, const Person& p);
 
+private:
     const string lastName;
     const string firstName;
     const string date;
@@ -51,13 +52,6 @@ class SortBy {
 public:
     SortBy(PERSON type);
     bool operator() (const Person& p1, const Person& p2);
-
-    /*
-    static bool sortLastName(const Person& p1, const Person& p2);
-    static bool sortFirstName(const Person& p1, const Person& p2);
-    static bool sortDate(const Person& p1, const Person& p2);
-    static bool sortId(const Person& p1, const Person& p2);
-    */
 
 private:
     PERSON type;
