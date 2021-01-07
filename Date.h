@@ -33,13 +33,12 @@ class Date {
    friend Date operator+(int lhs,Date rhs);
    friend Date operator-(int lhs, Date rhs);
 
-
 public:
    //constructeurs
 
    Date();
    Date(unsigned int day, unsigned int month, unsigned int year);
-   Date(std::string string);
+   explicit Date(std::string string);
    Date(const Date& date) : day(date.day), month(date.month), year(date.year){}
 
    //getter and setter
@@ -75,9 +74,21 @@ public:
 
    Date& operator=(const Date&rhs);
 
+   //string cast
 
+   explicit operator std::string() const;
 
+   //validation functions
+   bool isValid();
+   static bool isValid(unsigned day, unsigned month, unsigned year);
 
+   //leap year functions
+   bool isLeapYear();
+   static bool isLeapYear(unsigned year);
+
+   //number of day  in months functions
+   unsigned numberDaysInMonth();
+   static unsigned numberDaysInMonth(unsigned month, unsigned year);
 private:
 
    unsigned day,
