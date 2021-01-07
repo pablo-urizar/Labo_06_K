@@ -1,4 +1,5 @@
 #include "Date.h"
+#include <ostream>
 
 Date::Date(){
    day = 1;
@@ -49,4 +50,14 @@ void Date::setCorrect(bool correct) {
    Date::correct = correct;
 }
 
+std::ostream& operator<<(std::ostream& os, const Date& date){
+   cout << date.getDay() << "-" << date.getMonth() << ""
+}
+
+ bool operator<(const Date& lhs, const Date& rhs) {/* comparaison < à écrire ici */}
+ bool operator>(const Date& lhs, const Date& rhs) {return rhs < lhs;}
+ bool operator<=(const Date& lhs, const Date& rhs) {return !(lhs > rhs);}
+ bool operator>=(const Date& lhs, const Date& rhs) {return !(lhs < rhs);}
+ bool operator==(const Date& lhs, const Date& rhs) {/* comparaison == à écrire ici */}
+ bool operator!=(const Date& lhs, const Date& rhs) {return !(lhs == rhs);}
 
