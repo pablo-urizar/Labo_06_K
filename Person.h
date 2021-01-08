@@ -1,41 +1,58 @@
+/*-------------------------------------------------------------------------------
+ Laboratory     : 07 - Person / Date
+ File           : Person.h
+ Authors        : Sarah Jallon, Pablo Urizar
+ Date           : 08.01.2021
+ Objective      : Class members' prototypes
+
+ Comments       :
+
+ Compiler       : MinGW-g++ 8.1.0
+ -------------------------------------------------------------------------------*/
 #ifndef LABO_06_K_PERSON_H
 #define LABO_06_K_PERSON_H
 
 #include <string>
+#include "Date.h"
 
 using namespace std;
 
-enum class PERSON {NO_ID, LASTNAME, FIRSTNAME, DATE};
+enum class PERSON {LASTNAME, FIRSTNAME, DATE, NO_ID};
 
-// CLASSES ET PROTOTYPES DES FONCTIONS MEMBRES
+// Friend classes used in class Person
 class SortBy;
 class FindBy;
 
+
+//------------------------------- Class Person --------------------------------//
 class Person {
 public:
-    // Constructeur par défaut
-    Person(string firstName, string lastName, string date);
+    // Default constructor
+    Person(string lastName, string firstName, string date);
 
-    // Constructeur de copie
+    // Copy constructor
     Person(const Person& p);
 
-    // Constructeur d'affectation
+    // Assignment constructor
     Person& operator=(const Person& p);
 
-    // Destructeur
+    // Destructor
     ~Person();
 
+    // Returns number of 'active' Person's objects
     static unsigned nbrePerson();
 
     // Getters
-    unsigned getID() const;
-    string getFirstName() const;
     string getLastName() const;
+    string getFirstName() const;
     string getDate() const;
+    unsigned getID() const;
 
+    // Display person's attributes
     friend ostream& operator<<(ostream& os, const Person& p);
 
 private:
+    // Class attributes
     const string lastName;
     const string firstName;
     const string date;
@@ -44,30 +61,32 @@ private:
     static unsigned nextId;
     static unsigned nbre;
 
+    // Friend classes
     friend SortBy;
     friend FindBy;
 };
 
+//------------------------------- Class SortBy --------------------------------//
 class SortBy {
 public:
     SortBy(PERSON type);
     bool operator() (const Person& p1, const Person& p2);
 
 private:
+    // Class attribute
     PERSON type;
 };
 
+//------------------------------- Class FindBy --------------------------------//
 class FindBy {
 public:
     FindBy(const PERSON& type, const string valeur);
     bool operator()(Person p);
 
 private:
+    // Class attributes
     PERSON type;
-    string findFirstName;
-    string findLastName;
-    string findDate;
-    unsigned findId;
+    string findByStr;
 };
 
 #endif //LABO_06_K_PERSON_H
