@@ -1,18 +1,22 @@
+/*-------------------------------------------------------------------------------
+ Laboratory     : 07 - Person / Date
+ File           : Person.cpp
+ Authors        : Sarah Jallon, Pablo Urizar
+ Date           : 08.01.2021
+ Objective      : Class member functions' definition
+
+ Comments       :
+
+ Compiler       : MinGW-g++ 8.1.0
+ -------------------------------------------------------------------------------*/
 #include "Person.h"
 
-#include <utility>
 #include <iomanip>
 #include <algorithm>
 
-// DÉFINITION DES FONCTIONS MEMBRES
-
-// Initialisation des éléments statiques
+// Static variables initialization
 unsigned Person::nextId = 0;
 unsigned Person:: nbre = 0;
-
-unsigned Person::getID() const {
-    return this->id;
-}
 
 string Person::getLastName() const {
     return this->lastName;
@@ -22,54 +26,56 @@ string Person::getFirstName() const {
     return this->firstName;
 }
 
-// "String date" - temporaire
+// "String date" - temporary
 string Person::getDate() const {
     return this->date;
+}
+
+unsigned Person::getID() const {
+    return this->id;
 }
 
 unsigned Person::nbrePerson() {
     return nbre;
 };
 
-// Constructeur par défaut
+//-------------------------------------- Class Person ---------------------------------------//
+// Default constructor
 Person::Person(string lastName, string firstName, string date) : lastName(lastName), firstName(firstName),
 date(date), id(++nextId) {++nbre;}
 
-// Constructeur de copie
+// Copy constructor
 Person::Person(const Person& p) : lastName(p.lastName), firstName(p.firstName), date(p.date), id(p.id) {++nbre;}
 
-// Constructeur d'affectation
+// Assignment constructor
 Person& Person::operator=(const Person& p) {
     if (this != &p) {
         (string&) lastName = p.getLastName();
-        (string&) firstName = p.firstName;
-        (string&) date = p.date;
-        (unsigned&) id = p.id;
+        (string&) firstName = p.getFirstName();
+        (string&) date = p.getDate();
+        (unsigned&) id = p.getID();
     }
     return *this;
 }
 
-// Destructeur
+// Destructor
 Person::~Person() {--nbre;}
 
-//-----------------------------------------------------------------------------------------------------------//
+// Display person's attributes
 ostream& operator<<(ostream& os, const Person& p) {
-    os  << p.lastName
+    os  <<p.lastName
         << '\t' << p .firstName
         << '\t' << p.date
         << '\t' << "(id=" << to_string(p.id) << ')';
 
     return os;
 }
-//-----------------------------------------------------------------------------------------------------------//
 
+//-------------------------------------- Class SortBy ---------------------------------------//
 SortBy::SortBy(PERSON type) : type(type){this->type = type;}
 
 bool SortBy::operator() (const Person& p1, const Person& p2) {
     switch (type) {
-        case PERSON::NO_ID:
-            return p1.getID() < p2.getID();
-
         case PERSON::LASTNAME:
             return (p1.getLastName() < p2.getLastName());
 
@@ -79,27 +85,29 @@ bool SortBy::operator() (const Person& p1, const Person& p2) {
         case PERSON::DATE:
             return p1.getDate() < p2.getDate();
 
-    }
-}
-
-FindBy::FindBy(const PERSON &type, const string str) : type(type){
-
-    switch (type) {
         case PERSON::NO_ID:
-            break;
+            return p1.getID() < p2.getID();
 
-        case PERSON::FIRSTNAME:
-            break;
-
-        case PERSON::LASTNAME:
-            break;
-
-        case PERSON::DATE:
-            break;
+        default:
+            return false;
     }
-
 }
+
+//-------------------------------------- Class FindBy ---------------------------------------//
+FindBy::FindBy(const PERSON &type, const string str) : findByStr(str){ this->type = type;}
 
 bool FindBy::operator()(Person p){
+    switch (type) {
+        case PERSON::LASTNAME:
+            return (findByStr == p.getLastName());
 
+        case PERSON::FIRSTNAME:
+            return (findByStr == p.getFirstName());
+
+        case PERSON::DATE:
+            return (findByStr == p.getDate());
+
+        case PERSON::NO_ID:
+            return (stoi(findByStr) == p.getID());
+    }
 }
