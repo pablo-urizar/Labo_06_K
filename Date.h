@@ -26,12 +26,11 @@ class Date {
 
    //arithmetic operators
 
-   friend Date operator+(Date lhs,int rhs);
-   friend Date operator-(Date lhs, int rhs);
+   friend Date operator+(Date& lhs,int rhs);
+   friend Date operator-(Date& lhs, int rhs);
 
    //commutativity of the arithmetic operators
-   friend Date operator+(int lhs,Date rhs);
-   friend Date operator-(int lhs, Date rhs);
+   friend Date operator+(int lhs,Date& rhs);
 
 public:
    //constructeurs
@@ -50,8 +49,7 @@ public:
    Month        getMonthEnum() const;
    std::string  getMonthString() const;
    void         setMonth(unsigned int month);
-   void         setMonth(std::string month);
-   void         setMonth(Month);
+   void         setMonth(std::string monthString);
 
    unsigned int getYear() const;
 

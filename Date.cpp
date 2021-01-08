@@ -51,21 +51,18 @@ bool operator!=(const Date& lhs, const Date& rhs) {
 
 //arithmetic operators
 
-Date operator+(Date lhs,int rhs){
-
+Date operator+(Date& lhs,int rhs){
+   return lhs += rhs;
 }
 
-Date operator-(Date lhs, int rhs){
-
+Date operator-(Date& lhs, int rhs){
+   return lhs -= rhs;
 }
 
 //commutativity of the arithmetic operators
 
-Date operator+(int lhs,Date rhs){
-
-}
-Date operator-(int lhs, Date rhs){
-
+Date operator+(int lhs,Date& rhs){
+   return rhs += lhs;
 }
 
 //constructors
@@ -81,7 +78,7 @@ Date::Date(unsigned day, unsigned month, unsigned year){
    this->year = year;
 }
 Date::Date(std::string string){
-
+   //TODO trouver les tiret et mettre dans une variable, puis supprimer le début
 }
 
 // getter and setters
@@ -101,7 +98,8 @@ void Date::setMonth(unsigned int month) {
    Date::month = month;
 }
 void Date::setMonth(std::string monthString) {
-   Date::month = month;
+   //todo utiliser l'array de string des mois et l'enum class ?
+   //Date::month = month;
 }
 
 unsigned int Date::getYear() const {
@@ -123,23 +121,26 @@ void Date::setCorrect(bool correct) {
 //compound assignement operators
 
 Date& Date::operator++(){
-
+   return *this += 1;
 }
 
 Date& Date::operator++(int) {
-
+   Date temp = *this;
+   ++*this;
+   return temp;
 }
 
 Date& Date::operator--(){
-
+   return *this-= 1;
 }
 
 Date& Date::operator--(int) {
-
+   Date temp = *this;
+   --*this;
+   return temp;
 }
 
 Date& Date::operator+=(const int& rhs) {
-   //ne pas faire de switch
    unsigned temp = rhs;
    while (temp){
       if (this->getDay() + temp < this->numberDaysInMonth()) {
@@ -152,6 +153,7 @@ Date& Date::operator+=(const int& rhs) {
          this->setDay(1);
       }
    }
+   return *this;
 }
 
 Date& Date::operator-=(const int& rhs){
@@ -167,6 +169,7 @@ Date& Date::operator-=(const int& rhs){
          this->setDay(numberDaysInMonth());
       }
    }
+   return *this;
 }
 
 //increment/decrement month
@@ -202,16 +205,16 @@ Date& Date::operator=(const Date&rhs){
 //string cast
 
 //explicit operator std::string() const{
-
+   //todo
 //}
 
 //validation functions
 bool Date::isValid(){
-
+   //todo
 }
 
 bool Date::isValid(unsigned day, unsigned month, unsigned year){
-
+   //todo
 }
 
 //leap year functions
