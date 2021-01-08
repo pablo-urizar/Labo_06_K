@@ -70,6 +70,11 @@ public:
    Date& operator+=(const int& rhs);
    Date& operator-=(const int& rhs);
 
+   //increment/decrement month
+   void incrementMonth();
+   void decrementMonth();
+
+
    //assignement operator
 
    Date& operator=(const Date&rhs);

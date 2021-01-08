@@ -1,3 +1,15 @@
+/*-------------------------------------------------------------------------------
+ Laboratory     : 07 - Person / Date
+ File           : Person.cpp
+ Authors        : Sarah Jallon, Pablo Urizar
+ Date           : 08.01.2021
+ Objective      : Class member functions' definition
+
+ Comments       :
+
+ Compiler       : MinGW-g++ 8.1.0
+ -------------------------------------------------------------------------------*/
+
 #include "Date.h"
 #include <iostream>
 
@@ -59,9 +71,9 @@ Date operator-(int lhs, Date rhs){
 //constructors
 
 Date::Date(){
-   day = 1;
-   month = 1;
-   year = 1900;
+   this->day = 1;
+   this->month = 1;
+   this->year = 1900;
 }
 Date::Date(unsigned day, unsigned month, unsigned year){
    this->day = day;
@@ -88,7 +100,7 @@ unsigned int Date::getMonthNo() const {
 void Date::setMonth(unsigned int month) {
    Date::month = month;
 }
-void Date::setMonth(std::string month) {
+void Date::setMonth(std::string monthString) {
    Date::month = month;
 }
 
@@ -127,11 +139,56 @@ Date& Date::operator--(int) {
 }
 
 Date& Date::operator+=(const int& rhs) {
-
+   //ne pas faire de switch
+   unsigned temp = rhs;
+   while (temp){
+      if (this->getDay() + temp < this->numberDaysInMonth()) {
+         this->setDay(this->getDay() + rhs);
+         temp = 0;
+      }
+      else {
+         temp -= this->numberDaysInMonth() - this->getDay() - 1;
+         this->incrementMonth();
+         this->setDay(1);
+      }
+   }
 }
 
 Date& Date::operator-=(const int& rhs){
+   unsigned temp = rhs;
+   while (temp){
+      if (this->getDay() - temp > 1) {
+         this->setDay(this->getDay() - rhs);
+         temp = 0;
+      }
+      else {
+         temp -= this->getDay();
+         this->decrementMonth();
+         this->setDay(numberDaysInMonth());
+      }
+   }
+}
 
+//increment/decrement month
+
+void Date::incrementMonth(){
+   if ( this->getMonthNo() == 12 ){
+      this->setMonth(1);
+      this->setYear(this->getYear() + 1);
+   }
+   else {
+      this->setMonth(this->getMonthNo() + 1);
+   }
+}
+
+void Date::decrementMonth() {
+   if ( this->getMonthNo() == 1 ){
+      this->setMonth(12);
+      this->setYear(this->getYear() - 1);
+   }
+   else {
+      this->setMonth(this->getMonthNo() - 1);
+   }
 }
 
 //assignement operator
@@ -144,9 +201,9 @@ Date& Date::operator=(const Date&rhs){
 
 //string cast
 
-explicit operator std::string() const{
+//explicit operator std::string() const{
 
-}
+//}
 
 //validation functions
 bool Date::isValid(){
