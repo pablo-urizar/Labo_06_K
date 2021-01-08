@@ -109,5 +109,8 @@ bool FindBy::operator()(Person p){
 
         case PERSON::NO_ID:
             return (stoi(findByStr) == p.getID());
+
+        default:
+            return false;
     }
 }
