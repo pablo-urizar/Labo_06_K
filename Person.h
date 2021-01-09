@@ -28,7 +28,7 @@ class FindBy;
 class Person {
 public:
     // Default constructor
-    Person(string lastName, string firstName, string date);
+    Person(string lastName, string firstName, Date date);
 
     // Copy constructor
     Person(const Person& p);
@@ -45,7 +45,7 @@ public:
     // Getters
     string getLastName() const;
     string getFirstName() const;
-    string getDate() const;
+    Date getDate() const;
     unsigned getID() const;
 
     // Display person's attributes
@@ -55,7 +55,7 @@ private:
     // Class attributes
     const string lastName;
     const string firstName;
-    const string date;
+    const Date date;
     const unsigned id;
 
     static unsigned nextId;
@@ -80,13 +80,13 @@ private:
 //------------------------------- Class FindBy --------------------------------//
 class FindBy {
 public:
-    FindBy(const PERSON& type, const string valeur);
+    FindBy(PERSON type, const string valeur);
     bool operator()(Person p);
 
 private:
     // Class attributes
     PERSON type;
-    string findByStr;
+    const string findByStr;
 };
 
 #endif //LABO_06_K_PERSON_H

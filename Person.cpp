@@ -26,8 +26,7 @@ string Person::getFirstName() const {
     return this->firstName;
 }
 
-// "String date" - temporary
-string Person::getDate() const {
+Date Person::getDate() const {
     return this->date;
 }
 
@@ -41,7 +40,7 @@ unsigned Person::nbrePerson() {
 
 //-------------------------------------- Class Person ---------------------------------------//
 // Default constructor
-Person::Person(string lastName, string firstName, string date) : lastName(lastName), firstName(firstName),
+Person::Person(string lastName, string firstName, Date date) : lastName(lastName), firstName(firstName),
 date(date), id(++nextId) {++nbre;}
 
 // Copy constructor
@@ -52,7 +51,7 @@ Person& Person::operator=(const Person& p) {
     if (this != &p) {
         (string&) lastName = p.getLastName();
         (string&) firstName = p.getFirstName();
-        (string&) date = p.getDate();
+        (Date&) date = p.getDate();
         (unsigned&) id = p.getID();
     }
     return *this;
@@ -94,7 +93,7 @@ bool SortBy::operator() (const Person& p1, const Person& p2) {
 }
 
 //-------------------------------------- Class FindBy ---------------------------------------//
-FindBy::FindBy(const PERSON &type, const string str) : findByStr(str){ this->type = type;}
+FindBy::FindBy(PERSON type, const string str) : findByStr(str){ this->type = type;}
 
 bool FindBy::operator()(Person p){
     switch (type) {
@@ -105,7 +104,7 @@ bool FindBy::operator()(Person p){
             return (findByStr == p.getFirstName());
 
         case PERSON::DATE:
-            return (findByStr == p.getDate());
+            return (findByStr == string(p.getDate()));
 
         case PERSON::NO_ID:
             return (stoi(findByStr) == p.getID());
