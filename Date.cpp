@@ -24,73 +24,84 @@ std::array<std::string,12> monthArray = {"January", "February", "March", "April"
 //stream operator
 
 std::ostream& operator<<(std::ostream& os, const Date& date){
-   std::cout << std::setfill('0') << std::setw(2) << date.getDay() << "-"
-             << std::setfill('0') << std::setw(2) << date.getMonthNo() << "-"
-             << date.getYear();
+   if (date.isValid()) {
+      std::cout << std::setfill('0') << std::setw(2) << date.getDay() << "-"
+                << std::setfill('0') << std::setw(2) << date.getMonthNo() << "-"
+                << date.getYear();
+   }
+   else {
+      std::cout << "Invalid date";
+   }
    return os;
 }
 
 //comparison operators
+
 bool operator<(const Date& lhs, const Date& rhs) {
-   return (lhs.getYear() < rhs.getYear())                                               ||
-          (lhs.getYear() == rhs.getYear()       && lhs.getMonthNo() < rhs.getMonthNo()) ||
-          (lhs.getMonthNo() == rhs.getMonthNo() && lhs.getDay() < rhs.getDay());
+      return lhs.isValid() && rhs.isValid() && (
+                  (lhs.getYear() < rhs.getYear()) ||
+                  (lhs.getYear() == rhs.getYear() && lhs.getMonthNo() < rhs.getMonthNo()) ||
+                  (lhs.getMonthNo() == rhs.getMonthNo() && lhs.getDay() < rhs.getDay())
+              );
 }
 
 bool operator>(const Date& lhs, const Date& rhs) {
-   return rhs < lhs;
+   return lhs.isValid() && rhs.isValid() && rhs < lhs;
 }
 
 bool operator<=(const Date& lhs, const Date& rhs) {
-   return !(lhs > rhs);
+   return lhs.isValid() && rhs.isValid() && !(lhs > rhs);
 }
 
 bool operator>=(const Date& lhs, const Date& rhs) {
-   return !(lhs < rhs);
+      return lhs.isValid() && !(lhs < rhs);
 }
 
 bool operator==(const Date& lhs, const Date& rhs) {
-   return lhs.getYear() == rhs.getYear()       &&
+   return lhs.isValid()    && rhs.isValid()    &&
+          lhs.getYear()    == rhs.getYear()    &&
           lhs.getMonthNo() == rhs.getMonthNo() &&
-          lhs.getDay() == rhs.getDay();
+          lhs.getDay()     == rhs.getDay();
 }
 
 bool operator!=(const Date& lhs, const Date& rhs) {
-   return !(lhs == rhs);
+   return lhs.isValid() && rhs.isValid() && !(lhs == rhs);
 }
 
 //arithmetic operators
 
 Date operator+(Date lhs,int rhs){
-   return lhs += rhs;
+   return lhs.isValid() ? lhs += rhs : lhs;    //invalid date -> lhs is unchanged
 }
 
 Date operator-(Date lhs, int rhs){
-   return lhs -= rhs;
+   return lhs.isValid() ? lhs -= rhs : lhs;
 }
 
 //commutativity of the arithmetic operators
 
 Date operator+(int lhs,Date rhs){
-   return rhs += lhs;
+   return rhs.isValid() ? rhs += lhs : rhs;
 }
 
 //constructors
 
 Date::Date(){
-   this->day = 1;
-   this->month = 1;
-   this->year = 1900;
+   day = 1;
+   month = 1;
+   year = 1900;
 }
 Date::Date(unsigned day, unsigned month, unsigned year){
    this->day = day;
    this->month = month;
    this->year = year;
+   isValid() ? setCorrect(true) : setCorrect(false);
 }
 Date::Date(const std::string& string){
-   this->day   = stoi(string.substr(0,2));
-   this->month = stoi(string.substr(3,2));
-   this->year  = stoi(string.substr(6,4));
+   day   = stoi(string.substr(0,2));
+   month = stoi(string.substr(3,2));
+   year  = stoi(string.substr(6,4));
+   isValid() ? setCorrect(true) : setCorrect(false);
 }
 
 // getter and setters
@@ -100,6 +111,7 @@ unsigned int Date::getDay() const {
 
 void Date::setDay(unsigned int day) {
    Date::day = day;
+   isValid() ? setCorrect(true) : setCorrect(false);
 }
 
 unsigned int Date::getMonthNo() const {
@@ -115,7 +127,8 @@ std::string Date::getMonthString() const{
 }
 
 void Date::setMonth(unsigned int month) {
-   Date::month = month;
+   this->month = month;
+   isValid() ? setCorrect(true) : setCorrect(false);
 }
 
 void Date::setMonth(const std::string& monthString) {
@@ -126,10 +139,12 @@ void Date::setMonth(const std::string& monthString) {
       std::cout << "enter a correct month name" << std::endl;
       assert(false);
    }
+   isValid() ? setCorrect(true) : setCorrect(false);
 }
 
 void Date::setMonth(Month month){
    this->setMonth(unsigned(month));
+   isValid() ? setCorrect(true) : setCorrect(false);
 }
 
 unsigned int Date::getYear() const {
@@ -137,7 +152,8 @@ unsigned int Date::getYear() const {
 }
 
 void Date::setYear(unsigned int year) {
-   Date::year = year;
+   this->year = year;
+   isValid() ? setCorrect(true) : setCorrect(false);
 }
 
 bool Date::isCorrect() const {
@@ -151,52 +167,54 @@ void Date::setCorrect(bool correct) {
 //compound assignement operators
 
 Date& Date::operator++(){
-   return *this += 1;
+   return isValid() ? *this += 1 : *this;
 }
 
 Date& Date::operator++(int) {
    Date& temp = *this;
-   ++*this;
+   if(isValid()) ++*this;
    return temp;
 }
 
 Date& Date::operator--(){
-   return *this-= 1;
+   return isValid() ? *this-= 1 : *this;
 }
 
 Date& Date::operator--(int) {
-   Date& temp = *this;
-   --*this;
+   Date &temp = *this;
+   if(isValid()) --*this;
    return temp;
 }
 
 Date& Date::operator+=(const int& rhs) {
-   unsigned temp = rhs;
-   while (temp){
-      if (this->getDay() + temp < this->numberDaysInMonth()) {
-         this->setDay(this->getDay() + temp);
-         temp = 0;
-      }
-      else {
-         temp -= numberDaysInMonth() - getDay() + 1;
-         incrementMonth();
-         setDay(1);
+   if(isValid()) {
+      unsigned temp = rhs;
+      while (temp) {
+         if (this->getDay() + temp < this->numberDaysInMonth()) {
+            this->setDay(this->getDay() + temp);
+            temp = 0;
+         } else {
+            temp -= numberDaysInMonth() - getDay() + 1;
+            incrementMonth();
+            setDay(1);
+         }
       }
    }
    return *this;
 }
 
 Date& Date::operator-=(const int& rhs){
-   int temp = rhs;
-   while (temp){
-      if (int(this->getDay()) - temp >= 1) {
-         this->setDay(this->getDay() - temp);
-         temp = 0;
-      }
-      else {
-         temp -= this->getDay();
-         this->decrementMonth();
-         this->setDay(numberDaysInMonth());
+   if (isValid()) {
+      int temp = rhs;
+      while (temp) {
+         if (int(this->getDay()) - temp >= 1) {
+            this->setDay(this->getDay() - temp);
+            temp = 0;
+         } else {
+            temp -= this->getDay();
+            this->decrementMonth();
+            this->setDay(numberDaysInMonth());
+         }
       }
    }
    return *this;
@@ -230,31 +248,37 @@ Date& Date::operator=(const Date&rhs){
    year  = rhs.getYear();
    month = rhs.getMonthNo();
    day   = rhs.getDay();
+   isValid() ? setCorrect(true) : setCorrect(false);
    return *this;
 }
 
 //string cast
 
 Date::operator std::string() const{
-   std::stringstream convert;
-   convert << std::setfill('0') << std::setw(2) << day   << "-"
-           << std::setfill('0') << std::setw(2) << month << "-"
-           << std::setw(4) << year;
-   std::string string = convert.str();
-   return string;
+   if (isValid()) {
+      std::stringstream convert;
+      convert << std::setfill('0') << std::setw(2) << day << "-"
+              << std::setfill('0') << std::setw(2) << month << "-"
+              << std::setw(4) << year;
+      std::string string = convert.str();
+      return string;
+   }
+   else {
+      return "Invalid date";
+   }
 }
 
-//validation functions
+//validation
+
 bool Date::isValid() const{
    return isValid(day,month,year);
 }
 
 bool Date::isValid(unsigned day, unsigned month, unsigned year){
-   //todo
-   return true;
+   return month <= 12 && month >= 1 && day <= numberDaysInMonth(month, year) && day >= 1;
 }
 
-//leap year functions
+//leap year
 
 bool Date::isLeapYear() const {
    return isLeapYear(this->getYear());
@@ -264,7 +288,7 @@ bool Date::isLeapYear(unsigned year){
    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
 
-//number of day  in months functions
+//number of day in month
 
 unsigned Date::numberDaysInMonth() const{
    return numberDaysInMonth(this->getMonthNo(), this->getYear());

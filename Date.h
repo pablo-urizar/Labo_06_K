@@ -7,8 +7,6 @@
  enum class Month { JANUARY = 1, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY,
                      AUGUST, SEPTEMBER, OCTOBRER, NOVEMBRER, DECEMBRER};
 
-
-
 class Date {
    //stream operator
 
@@ -29,15 +27,19 @@ class Date {
    friend Date operator-(Date lhs, int rhs);
 
    //commutativity of the arithmetic operators
+
    friend Date operator+(int lhs,Date rhs);
 
 public:
+
    //constructeurs
 
    Date();
    Date(unsigned int day, unsigned int month, unsigned int year);
    explicit Date(const std::string& string);
-   Date(const Date& date) : day(date.day), month(date.month), year(date.year){}
+   Date(const Date& date) : day(date.day), month(date.month), year(date.year){
+      isValid() ? setCorrect(true) : setCorrect(false);
+   }
 
    //getter and setter
 
@@ -80,16 +82,20 @@ public:
    explicit operator std::string() const;
 
    //validation functions
+
    bool isValid() const;
    static bool isValid(unsigned day, unsigned month, unsigned year);
 
    //leap year functions
+
    bool isLeapYear() const;
    static bool isLeapYear(unsigned year);
 
    //number of day  in months functions
+
    unsigned numberDaysInMonth() const;
    static unsigned numberDaysInMonth(unsigned month, unsigned year);
+
 private:
 
    unsigned day,
