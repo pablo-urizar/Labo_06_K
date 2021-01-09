@@ -12,11 +12,14 @@
 
 #include "Date.h"
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 
 //stream operator
 
 std::ostream& operator<<(std::ostream& os, const Date& date){
-   std::cout << date.getDay() << "-" << date.getMonthNo() << "-" << date.getYear();
+   std::cout << std::setfill('0') << std::setw(2) <<
+            date.getDay() << "-" << date.getMonthNo() << "-" << date.getYear();
    return os;
 }
 
@@ -77,8 +80,10 @@ Date::Date(unsigned day, unsigned month, unsigned year){
    this->month = month;
    this->year = year;
 }
-Date::Date(std::string string){
-   //TODO trouver les tiret et mettre dans une variable, puis supprimer le début
+Date::Date(const std::string& string){
+   this->day   = stoi(string.substr(0,2));
+   this->month = stoi(string.substr(3,2));
+   this->year  = stoi(string.substr(6,4));
 }
 
 // getter and setters
@@ -94,12 +99,24 @@ unsigned int Date::getMonthNo() const {
    return month;
 }
 
+Month Date::getMonthEnum() const {
+   return Month(getMonthNo());
+}
+
+std::string Date::getMonthString() const{
+   return monthArray[this->getMonthNo()-1];
+}
+
 void Date::setMonth(unsigned int month) {
    Date::month = month;
 }
+
 void Date::setMonth(std::string monthString) {
-   //todo utiliser l'array de string des mois et l'enum class ?
-   //Date::month = month;
+   setMonth(monthArray->find(monthString));
+}
+
+void Date::setMonth(Month month){
+   this->setMonth(unsigned(month));
 }
 
 unsigned int Date::getYear() const {
@@ -125,7 +142,7 @@ Date& Date::operator++(){
 }
 
 Date& Date::operator++(int) {
-   Date temp = *this;
+   Date& temp = *this;
    ++*this;
    return temp;
 }
@@ -135,7 +152,7 @@ Date& Date::operator--(){
 }
 
 Date& Date::operator--(int) {
-   Date temp = *this;
+   Date& temp = *this;
    --*this;
    return temp;
 }
@@ -197,30 +214,38 @@ void Date::decrementMonth() {
 //assignement operator
 
 Date& Date::operator=(const Date&rhs){
-   this->setYear(rhs.getYear());
-   this->setMonth(rhs.getMonthNo());
-   this->setDay(rhs.getDay());
+   year  = rhs.getYear();
+   month = rhs.getMonthNo();
+   day   = rhs.getDay();
+   return *this;
 }
 
 //string cast
 
-//explicit operator std::string() const{
-   //todo
-//}
+Date::operator std::string() const{
+   std::stringstream convert;
+   convert << std::setfill('0')
+           << std::setw(2) << day
+           << month
+           << std::setw(4) << year;
+   std::string string = convert.str();
+   return string;
+}
 
 //validation functions
-bool Date::isValid(){
-   //todo
+bool Date::isValid() const{
+   return isValid(day,month,year);
 }
 
 bool Date::isValid(unsigned day, unsigned month, unsigned year){
    //todo
+   return true;
 }
 
 //leap year functions
 
-bool Date::isLeapYear(){
-   return (this->getYear() % 4 == 0 && this->getYear() % 100 != 0) || (this->getYear() % 400 == 0);
+bool Date::isLeapYear() const {
+   return isLeapYear(this->getYear());
 }
 
 bool Date::isLeapYear(unsigned year){
@@ -229,10 +254,9 @@ bool Date::isLeapYear(unsigned year){
 
 //number of day  in months functions
 
-unsigned Date::numberDaysInMonth(){
-   return this->getMonthNo() == int(Month::FEBRUARY) ? this->isLeapYear() ? 28 : 29 : 31 - this->getMonthNo() % 7 % 2;
+unsigned Date::numberDaysInMonth() const{
+   return numberDaysInMonth(this->getMonthNo(), this->getYear());
 }
-
-static unsigned numberDaysInMonth(unsigned month, unsigned year){
+unsigned Date::numberDaysInMonth(unsigned month, unsigned year){
    return month == int(Month::FEBRUARY) ? Date::isLeapYear(year) ? 28 : 29 : 31 - month % 7 % 2;
 }

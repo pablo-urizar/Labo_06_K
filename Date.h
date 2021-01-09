@@ -7,7 +7,7 @@
 enum class Month { JANUARY = 1, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY,
                      AUGUST, SEPTEMBER, OCTOBRER, NOVEMBRER, DECEMBRER};
 
-std::string month[12] = {"January", "February", "March", "April", "May", "June", "July",
+std::string monthArray[] = {"January", "February", "March", "April", "May", "June", "July",
                            "August", "September", "October", "November", "December"};
 
 class Date {
@@ -37,7 +37,7 @@ public:
 
    Date();
    Date(unsigned int day, unsigned int month, unsigned int year);
-   explicit Date(std::string string);
+   explicit Date(const std::string& string);
    Date(const Date& date) : day(date.day), month(date.month), year(date.year){}
 
    //getter and setter
@@ -50,13 +50,12 @@ public:
    std::string  getMonthString() const;
    void         setMonth(unsigned int month);
    void         setMonth(std::string monthString);
+   void         setMonth(Month month);
 
    unsigned int getYear() const;
-
    void setYear(unsigned int year);
 
    bool isCorrect() const;
-
    void setCorrect(bool correct);
 
    //compound assignement operators
@@ -69,9 +68,9 @@ public:
    Date& operator-=(const int& rhs);
 
    //increment/decrement month
+
    void incrementMonth();
    void decrementMonth();
-
 
    //assignement operator
 
@@ -82,15 +81,15 @@ public:
    explicit operator std::string() const;
 
    //validation functions
-   bool isValid();
+   bool isValid() const;
    static bool isValid(unsigned day, unsigned month, unsigned year);
 
    //leap year functions
-   bool isLeapYear();
+   bool isLeapYear() const;
    static bool isLeapYear(unsigned year);
 
    //number of day  in months functions
-   unsigned numberDaysInMonth();
+   unsigned numberDaysInMonth() const;
    static unsigned numberDaysInMonth(unsigned month, unsigned year);
 private:
 
