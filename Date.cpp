@@ -14,14 +14,19 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <algorithm>
+#include <array>
+#include <cassert>
 
-std::string monthArray[12] = {"January", "February", "March", "April", "May", "June", "July",
+std::array<std::string,12> monthArray = {"January", "February", "March", "April", "May", "June", "July",
 "August", "September", "October", "November", "December"};
+
 //stream operator
 
 std::ostream& operator<<(std::ostream& os, const Date& date){
-   std::cout << std::setfill('0') << std::setw(2) <<
-            date.getDay() << "-" << date.getMonthNo() << "-" << date.getYear();
+   std::cout << std::setfill('0') << std::setw(2) << date.getDay() << "-"
+             << std::setfill('0') << std::setw(2) << date.getMonthNo() << "-"
+             << date.getYear();
    return os;
 }
 
@@ -56,17 +61,17 @@ bool operator!=(const Date& lhs, const Date& rhs) {
 
 //arithmetic operators
 
-Date operator+(Date& lhs,int rhs){
+Date operator+(Date lhs,int rhs){
    return lhs += rhs;
 }
 
-Date operator-(Date& lhs, int rhs){
+Date operator-(Date lhs, int rhs){
    return lhs -= rhs;
 }
 
 //commutativity of the arithmetic operators
 
-Date operator+(int lhs,Date& rhs){
+Date operator+(int lhs,Date rhs){
    return rhs += lhs;
 }
 
@@ -113,8 +118,14 @@ void Date::setMonth(unsigned int month) {
    Date::month = month;
 }
 
-void Date::setMonth(std::string monthString) {
-   setMonth(monthArray->find(monthString));
+void Date::setMonth(const std::string& monthString) {
+   auto it = std::find(monthArray.begin(), monthArray.end(), monthString);
+   if ( it != monthArray.end()){
+      setMonth(it - monthArray.begin() + 1);
+   } else {
+      std::cout << "enter a correct month name" << std::endl;
+      assert(false);
+   }
 }
 
 void Date::setMonth(Month month){
@@ -163,23 +174,23 @@ Date& Date::operator+=(const int& rhs) {
    unsigned temp = rhs;
    while (temp){
       if (this->getDay() + temp < this->numberDaysInMonth()) {
-         this->setDay(this->getDay() + rhs);
+         this->setDay(this->getDay() + temp);
          temp = 0;
       }
       else {
-         temp -= this->numberDaysInMonth() - this->getDay() - 1;
-         this->incrementMonth();
-         this->setDay(1);
+         temp -= numberDaysInMonth() - getDay() + 1;
+         incrementMonth();
+         setDay(1);
       }
    }
    return *this;
 }
 
 Date& Date::operator-=(const int& rhs){
-   unsigned temp = rhs;
+   int temp = rhs;
    while (temp){
-      if (this->getDay() - temp > 1) {
-         this->setDay(this->getDay() - rhs);
+      if (int(this->getDay()) - temp >= 1) {
+         this->setDay(this->getDay() - temp);
          temp = 0;
       }
       else {
@@ -226,9 +237,8 @@ Date& Date::operator=(const Date&rhs){
 
 Date::operator std::string() const{
    std::stringstream convert;
-   convert << std::setfill('0')
-           << std::setw(2) << day
-           << month
+   convert << std::setfill('0') << std::setw(2) << day   << "-"
+           << std::setfill('0') << std::setw(2) << month << "-"
            << std::setw(4) << year;
    std::string string = convert.str();
    return string;
@@ -260,5 +270,5 @@ unsigned Date::numberDaysInMonth() const{
    return numberDaysInMonth(this->getMonthNo(), this->getYear());
 }
 unsigned Date::numberDaysInMonth(unsigned month, unsigned year){
-   return month == int(Month::FEBRUARY) ? Date::isLeapYear(year) ? 28 : 29 : 31 - month % 7 % 2;
+   return month == int(Month::FEBRUARY) ? Date::isLeapYear(year) ? 29 : 28 : 31 - (month-1) % 7 % 2;
 }
