@@ -15,6 +15,8 @@
 #include <iomanip>
 #include <sstream>
 
+std::string monthArray[12] = {"January", "February", "March", "April", "May", "June", "July",
+"August", "September", "October", "November", "December"};
 //stream operator
 
 std::ostream& operator<<(std::ostream& os, const Date& date){

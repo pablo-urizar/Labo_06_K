@@ -4,11 +4,10 @@
 #include <string>
 #include <array>
 
-enum class Month { JANUARY = 1, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY,
+ enum class Month { JANUARY = 1, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY,
                      AUGUST, SEPTEMBER, OCTOBRER, NOVEMBRER, DECEMBRER};
 
-std::string monthArray[] = {"January", "February", "March", "April", "May", "June", "July",
-                           "August", "September", "October", "November", "December"};
+
 
 class Date {
    //stream operator
