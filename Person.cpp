@@ -5,12 +5,20 @@
  Date           : 08.01.2021
  Objective      : Class member functions' definition
 
- Comments       :
+ Comments       : Functions implemented in library:
+                    - Create person
+                        Usage : Person person (string lastName, string firstName, Date date)
+
+                    - Sort the list of people by any of its attributes
+                        Usage : SortBy(PERSON type)
+
+                    - Find a person by any of its attributes
+                        Usage : FindBy(PERSON type, const string strToFind)
 
  Compiler       : MinGW-g++ 8.1.0
  -------------------------------------------------------------------------------*/
-#include "Person.h"
 
+#include "Person.h"
 #include <iomanip>
 #include <algorithm>
 
@@ -18,11 +26,12 @@
 unsigned Person::nextId = 0;
 unsigned Person:: nbre = 0;
 
-string Person::getLastName() const {
+// Getters
+std::string Person::getLastName() const {
     return this->lastName;
 }
 
-string Person::getFirstName() const {
+std::string Person::getFirstName() const {
     return this->firstName;
 }
 
@@ -40,17 +49,18 @@ unsigned Person::nbrePerson() {
 
 //-------------------------------------- Class Person ---------------------------------------//
 // Default constructor
-Person::Person(string lastName, string firstName, Date date) : lastName(lastName), firstName(firstName),
-date(date), id(++nextId) {++nbre;}
+Person::Person  (std::string lastName, std::string firstName, Date date) : lastName(lastName),
+                firstName(firstName), date(date), id(++nextId) {++nbre;}
 
 // Copy constructor
-Person::Person(const Person& p) : lastName(p.lastName), firstName(p.firstName), date(p.date), id(p.id) {++nbre;}
+Person::Person  (const Person& p) : lastName(p.lastName), firstName(p.firstName), date(p.date),
+                id(p.id) {++nbre;}
 
 // Assignment constructor
 Person& Person::operator=(const Person& p) {
     if (this != &p) {
-        (string&) lastName = p.getLastName();
-        (string&) firstName = p.getFirstName();
+        (std::string&) lastName = p.getLastName();
+        (std::string&) firstName = p.getFirstName();
         (Date&) date = p.getDate();
         (unsigned&) id = p.getID();
     }
@@ -61,11 +71,11 @@ Person& Person::operator=(const Person& p) {
 Person::~Person() {--nbre;}
 
 // Display person's attributes
-ostream& operator<<(ostream& os, const Person& p) {
+std::ostream& operator<<(std::ostream& os, const Person& p) {
     os  <<p.lastName
         << '\t' << p .firstName
         << '\t' << p.date
-        << '\t' << "(id=" << to_string(p.id) << ')';
+        << '\t' << "(id=" << std::to_string(p.id) << ')';
 
     return os;
 }
@@ -93,7 +103,7 @@ bool SortBy::operator() (const Person& p1, const Person& p2) {
 }
 
 //-------------------------------------- Class FindBy ---------------------------------------//
-FindBy::FindBy(PERSON type, const string str) : findByStr(str){ this->type = type;}
+FindBy::FindBy(PERSON type, const std::string str) : findByStr(str){ this->type = type;}
 
 bool FindBy::operator()(Person p){
     switch (type) {
@@ -104,7 +114,7 @@ bool FindBy::operator()(Person p){
             return (findByStr == p.getFirstName());
 
         case PERSON::DATE:
-            return (findByStr == string(p.getDate()));
+            return (findByStr == std::string(p.getDate()));
 
         case PERSON::NO_ID:
             return (stoi(findByStr) == p.getID());
