@@ -1,11 +1,22 @@
-/*---------------------------------------------------------------------------------
+/*-------------------------------------------------------------------------------
  Laboratory     : 07 - Person / Date
  File           : Person.h
  Authors        : Sarah Jallon, Pablo Urizar
- Date           : 08.01.2021
- Objective      : Class members' prototypes
+ Date           : 11.01.2021
+ Objective      : Class member functions' prototypes
+
+ Comments       : Functions implemented in library:
+                    - Create person
+                        Usage : Person person (string lastName, string firstName, Date date)
+
+                    - Sort the list of people by any of its attributes
+                        Usage : SortBy(PERSON type)
+
+                    - Find a person by any of its attributes
+                        Usage : FindBy(PERSON type, const string strToFind)
+
  Compiler       : MinGW-g++ 8.1.0
- ---------------------------------------------------------------------------------*/
+ -------------------------------------------------------------------------------*/
 
 #ifndef LABO_06_K_PERSON_H
 #define LABO_06_K_PERSON_H

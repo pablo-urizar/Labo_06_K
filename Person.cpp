@@ -1,22 +1,11 @@
-/*-------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------
  Laboratory     : 07 - Person / Date
  File           : Person.cpp
  Authors        : Sarah Jallon, Pablo Urizar
- Date           : 08.01.2021
- Objective      : Class member functions' definition
-
- Comments       : Functions implemented in library:
-                    - Create person
-                        Usage : Person person (string lastName, string firstName, Date date)
-
-                    - Sort the list of people by any of its attributes
-                        Usage : SortBy(PERSON type)
-
-                    - Find a person by any of its attributes
-                        Usage : FindBy(PERSON type, const string strToFind)
-
+ Date           : 11.01.2021
+ Objective      : Class members' definition
  Compiler       : MinGW-g++ 8.1.0
- -------------------------------------------------------------------------------*/
+ ---------------------------------------------------------------------------------*/
 
 #include "Person.h"
 #include <iomanip>
