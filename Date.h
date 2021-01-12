@@ -1,3 +1,26 @@
+/*-------------------------------------------------------------------------------
+ Laboratory     : 07 - Person / Date
+ File           : Person.h
+ Authors        : Sarah Jallon, Pablo Urizar
+ Date           : 08.01.2021
+ Objective      : Class member functions' declaration
+
+ Comments       : This class overrides:
+                  - the stream operator,
+                  - the comparison operators,
+                  - some arithmetic operators ( +=, -=, +, - , ++, --),
+                  - the assignation operator,
+                  It also describes:
+                  - The getter and setters of the class,
+                  - incrementMonth(), decrementMonth(),
+                  - isLeapYear()
+                  - numberOfDaysInMonth(),
+                  - a function to know if an instance of a class is valid
+
+ Compiler       : MinGW-g++ 8.1.0
+ -------------------------------------------------------------------------------*/
+
+
 #ifndef LABO_06_K_DATE_H
 #define LABO_06_K_DATE_H
 
