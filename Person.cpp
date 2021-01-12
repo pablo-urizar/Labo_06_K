@@ -17,19 +17,19 @@ unsigned Person:: nbre = 0;
 
 // Getters
 std::string Person::getLastName() const {
-    return this->lastName;
+    return lastName;
 }
 
 std::string Person::getFirstName() const {
-    return this->firstName;
+    return firstName;
 }
 
 Date Person::getDate() const {
-    return this->date;
+    return date;
 }
 
 unsigned Person::getID() const {
-    return this->id;
+    return id;
 }
 
 unsigned Person::nbrePerson() {

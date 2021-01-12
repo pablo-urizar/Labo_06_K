@@ -120,7 +120,7 @@ Month Date::getMonthEnum() const {
 }
 
 std::string Date::getMonthString() const{
-   return monthArray[this->getMonthNo()-1];
+   return monthArray[getMonthNo()-1];
 }
 
 void Date::setMonth(unsigned int month) {
@@ -140,7 +140,7 @@ void Date::setMonth(const std::string& monthString) {
 }
 
 void Date::setMonth(Month month){
-   this->setMonth(unsigned(month));
+   this->month = unsigned(month);
    isValid() ? setCorrect(true) : setCorrect(false);
 }
 
@@ -187,8 +187,8 @@ Date& Date::operator+=(const int& rhs) {
    if(isValid()) {
       unsigned temp = rhs;
       while (temp) {
-         if (this->getDay() + temp < this->numberDaysInMonth()) {
-            this->setDay(this->getDay() + temp);
+         if (getDay() + temp < numberDaysInMonth()) {
+            setDay(getDay() + temp);
             temp = 0;
          } else {
             temp -= numberDaysInMonth() - getDay() + 1;
@@ -204,13 +204,13 @@ Date& Date::operator-=(const int& rhs){
    if (isValid()) {
       int temp = rhs;
       while (temp) {
-         if (int(this->getDay()) - temp >= 1) {
-            this->setDay(this->getDay() - temp);
+         if (int(day) - temp >= 1) {
+            day -= temp;
             temp = 0;
          } else {
-            temp -= this->getDay();
-            this->decrementMonth();
-            this->setDay(numberDaysInMonth());
+            temp -= day;
+            decrementMonth();
+            day = numberDaysInMonth();
          }
       }
    }
@@ -220,22 +220,22 @@ Date& Date::operator-=(const int& rhs){
 //increment/decrement month
 
 void Date::incrementMonth(){
-   if ( this->getMonthNo() == 12 ){
-      this->setMonth(1);
-      this->setYear(this->getYear() + 1);
+   if ( getMonthNo() == 12 ){
+      month = 1;
+      year += 1;
    }
    else {
-      this->setMonth(this->getMonthNo() + 1);
+      month += 1;
    }
 }
 
 void Date::decrementMonth() {
-   if ( this->getMonthNo() == 1 ){
-      this->setMonth(12);
-      this->setYear(this->getYear() - 1);
+   if ( month == 1 ){
+      month = 12;
+      year -= 1;
    }
    else {
-      this->setMonth(this->getMonthNo() - 1);
+      month -= 1;
    }
 }
 
@@ -278,7 +278,7 @@ bool Date::isValid(unsigned day, unsigned month, unsigned year){
 //leap year
 
 bool Date::isLeapYear() const {
-   return isLeapYear(this->getYear());
+   return isLeapYear(year);
 }
 
 bool Date::isLeapYear(unsigned year){
@@ -288,7 +288,7 @@ bool Date::isLeapYear(unsigned year){
 //number of day in month
 
 unsigned Date::numberDaysInMonth() const{
-   return numberDaysInMonth(this->getMonthNo(), this->getYear());
+   return numberDaysInMonth(month, year);
 }
 unsigned Date::numberDaysInMonth(unsigned month, unsigned year){
    return month == int(Month::FEBRUARY) ? Date::isLeapYear(year) ? 29 : 28 : 31 - (month-1) % 7 % 2;
