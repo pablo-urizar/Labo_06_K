@@ -1,6 +1,6 @@
 /*-------------------------------------------------------------------------------
  Laboratory     : 07 - Person / Date
- File           : Person.h
+ File           : Date.h
  Authors        : Sarah Jallon, Pablo Urizar
  Date           : 08.01.2021
  Objective      : Class member functions' declaration

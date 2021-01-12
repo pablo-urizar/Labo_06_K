@@ -1,12 +1,9 @@
 /*-------------------------------------------------------------------------------
  Laboratory     : 07 - Person / Date
- File           : Person.cpp
+ File           : Date.cpp
  Authors        : Sarah Jallon, Pablo Urizar
  Date           : 08.01.2021
  Objective      : Class member functions' definition
-
- Comments       :
-
  Compiler       : MinGW-g++ 8.1.0
  -------------------------------------------------------------------------------*/
 
